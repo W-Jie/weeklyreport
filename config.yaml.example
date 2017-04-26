@@ -1,0 +1,13 @@
+appname: WeeklyReport
+
+server: 
+    ip:  0.0.0.0
+    port: 8000
+
+debug: true
+
+db:
+    user:     U200401REPORT
+    password: pw094$01
+    tnsname:  reportdb_192.168.222.200
+    table:    test
