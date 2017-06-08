@@ -19,7 +19,7 @@ import (
 	"gopkg.in/olahol/melody.v1"
 )
 
-const SIZE = 65535 //max message size
+const SIZE = 65535 // max message size
 
 type Config struct {
 	AppName string `default:"WeeklyReport"`
@@ -108,7 +108,7 @@ func main() {
 			} else {
 				wg.Add(1)
 				go func() {
-					_, err := db.Exec(fmt.Sprintf("insert into %v(proj_name, proj_code, worker,work_content, problem, next_plan) values(:1,:2,:3,:4,:5,:6)", Config.DB.Table), key[0], key[1], key[2], key[3], key[4], key[5])
+					_, err := db.Exec(fmt.Sprintf("insert into %v(proj_name, proj_code, worker,work_content, problem, next_plan,sender) values(:1,:2,:3,:4,:5,:6,:7)", Config.DB.Table), key[0], key[1], key[2], key[3], key[4], key[5], Config.AppName)
 					if err != nil {
 						log.Println(err)
 					}
