@@ -1,8 +1,8 @@
 <html>
   <head>
     <title>WeeklyReport</title>
-  	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-  	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   </head>
 
   <style>
@@ -14,15 +14,15 @@
       padding: 20px;
       margin-top: 30px;
     }
-  	#input {
-  	  padding: 8px;
-  	  margin: 15px;
-  	  width: 75%;
+    #input {
+      padding: 8px;
+      margin: 15px;
+      width: 75%;
       height: 20%;
-  	}
-  	#submit {
-  		width: 75%;
-  	}
+    }
+    #submit {
+      width: 75%;
+    }
   </style>
 
   <body>
@@ -30,7 +30,7 @@
       <h3 class="margin-top: 30px;">WeeklyReport</h3>
       <pre id="rpt"></pre>
       <textarea placeholder="Ctrl+Enter 提交" id="input" type="text"  class="form-control" autofocus></textarea>
-	  <p><button id="submit" class="btn btn-large btn-primary">提交</button></p>
+      <p><button id="submit" class="btn btn-large btn-primary">提交</button></p>
     </center>
 
     <script>
@@ -42,45 +42,48 @@
       var submit = document.getElementById("submit");
 
       var now = function () {
-        //var iso = new Date().toLocaleString();
-        //return iso.split("T")[1].split(".")[0];
-		    return new Date().toLocaleString();
+        return new Date().toLocaleString();
       };
-	
-  	  window.onbeforeunload = function(){
-  	    ws.close();
-  	  };
-	
-  	  ws.onopen = function(){
-  		  rpt.innerHTML += now() + " " + '<span style="color: blue;">连接服务器成功!\n</span>' + "\n";
-  	  };
-  	
-  	  ws.onclose = function() { 
+
+      // 页面被关闭
+      window.onbeforeunload = function(){
+        ws.close();
+      };
+
+      // socket打开
+      ws.onopen = function(){
+        rpt.innerHTML += now() + " " + '<span style="color: blue;">连接服务器成功!\n</span>' + "\n";
+      };
+
+      // socket关闭
+      ws.onclose = function() { 
         rpt.innerHTML = now() + " " + '<span style="color: red;">已与服务器断开连接，请尝试刷新重连!\n</span>' + "\n";
       };
 
+      // 消息监听
       ws.onmessage = function (msg) {
-  		  var line = msg.data + "\n";
-        rpt.innerHTML  += line;
-  		  rpt.scrollTop = rpt.scrollHeight; // Auto scroll to the bottom
+        var line = msg.data + "\n";
+        rpt.innerHTML  += line;  // 消息叠加
+        rpt.scrollTop = rpt.scrollHeight;  // 自动滚屏到底部
       };
 
+      // 按下Ctrl+Enter键，发送消息
       input.onkeyup = function (e) {
-        if (event.ctrlKey){ 
-    		  if (event.keyCode == 13 && input.value !== "") {
-    		    ws.send(input.value);
-            input.value = '';
-    		  }
+        if (event.ctrlKey){  // 按下Ctrl键
+          if (event.keyCode == 13 && input.value !== "") {  // 按下Enter键(keycode=13)
+            ws.send(input.value);
+            input.value = '';  // 重置输入框为空
+          }
         }
       };
-	
-  	  submit.onclick = function(){
-    		if (input.value !=="") {
-    		  ws.send(input.value);
-    		  input.value = '';
-    		}
-  	  };
 
+      // 点击‘提交’按钮，发送消息
+      submit.onclick = function(){
+        if (input.value !=="") {
+          ws.send(input.value);
+          input.value = '';  // 重置输入框为空
+        }
+      };
     </script>
   </body>
 </html>
