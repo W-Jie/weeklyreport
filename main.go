@@ -86,7 +86,7 @@ func main() {
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
 		success_count := 0
 		fail_count := 0
-		t := time.Now()
+		t := time.Now().Format("2006年01月02日 15:04:05")
 
 		log.Printf("%v 收到数据：\n %v\n", t, string(msg))
 
